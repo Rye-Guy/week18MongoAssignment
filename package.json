@@ -1,0 +1,26 @@
+{
+  "name": "week18mongoassignment",
+  "version": "1.0.0",
+  "description": "web app that lets users leave comments on latest news.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rye-Guy/week18MongoAssignment.git"
+  },
+  "author": "Rye-Guy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rye-Guy/week18MongoAssignment/issues"
+  },
+  "homepage": "https://github.com/Rye-Guy/week18MongoAssignment#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "request": "^2.88.0"
+  }
+}
