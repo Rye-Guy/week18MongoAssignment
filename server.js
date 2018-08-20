@@ -11,7 +11,15 @@ var cheerio = require('cheerio');
 
 var app = express();
 
+app.use(logger("dev"));
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(express.static("public"));
+
 mongoose.connect('mongodb://localhost/Movie');
+
+var db = require("./models");
 
 
 var port = 8888;
@@ -31,43 +39,26 @@ app.get("/scrape", function(req, res){
         var $ = cheerio.load(html);
 
 
-
-        var movieRows = $("tbody.lister-list > tr").each(function(i, element){
+        $("tbody.lister-list > tr").each(function(i, element){
             
-            var results = [];
+            var result = {};
 
 
-            moviePoster = $(this).children("td.posterColumn").children("a").children("img").attr("src");
-            movieTitle = $(this).children("td.titleColumn").children("a").text();
-            movieRelease = $(this).children("td.titleColumn").children("span.secondaryInfo").text();
-            movieRating = $(this).children("td.ratingColumn").children("strong").attr("title");
-
-
-
-            results.push({
-                poster: moviePoster,
-                title: movieTitle,
-                release: movieRelease,
-                rating: movieRating
+            result.moviePoster = $(this).children("td.posterColumn").children("a").children("img").attr("src");
+            result.movieTitle = $(this).children("td.titleColumn").children("a").text();
+            result.movieRelease = $(this).children("td.titleColumn").children("span.secondaryInfo").text();
+            result.movieRating = $(this).children("td.ratingColumn").children("strong").attr("title");
+            
+            db.Movie.create(result).then(function(dbMovies){
+                console.log(dbMovies);
+                console.log(result);
+            }).catch(function(err){
+                return res.json(err);
             });
-
-            var entry = new Movie(results);
-
-            entry.save(function(err, doc){
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    console.log(doc);
-                }
-            })
 
         });
 
-
-        // console.log(results);
-
   });
        
-
-    });
+  res.send("Movies Scraped");
+});

@@ -15,6 +15,10 @@ var MovieSchema = new Schema({
     },
     rating:{
         type: String
+    },
+    note: {
+        type: Schema.Types.ObjectId,
+        ref: "Note"
     }
 });
 
