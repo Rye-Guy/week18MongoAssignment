@@ -21,8 +21,7 @@ mongoose.connect('mongodb://localhost/Movie');
 
 var db = require("./models");
 
-
-var port = 8888;
+var port = 8889;
 
 app.listen(process.env.PORT || port, function(){
     console.log('server running on port 4545');
@@ -51,7 +50,7 @@ app.get("/scrape", function(req, res){
             
             db.Movie.create(result).then(function(dbMovies){
                 console.log(dbMovies);
-                console.log(result);
+                console.log("Scrape completed");
             }).catch(function(err){
                 return res.json(err);
             });
@@ -59,6 +58,14 @@ app.get("/scrape", function(req, res){
         });
 
   });
-       
+
   res.send("Movies Scraped");
+});
+
+app.get('/movies', function(req, res){
+    db.Movie.find({}).then(function(dbMovies){
+        res.json(dbMovies)
+    }).catch(function(err){
+        res.json(err);
+    });
 });

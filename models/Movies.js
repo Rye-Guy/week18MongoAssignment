@@ -3,23 +3,28 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var MovieSchema = new Schema({
-    poster: {
+    
+    moviePoster: {
         type: String
     },
-    title: {
+    movieTitle: {
         type: String
 
     },
-    release:{
+    movieRelease:{
         type: String
     },
-    rating:{
+    movieRating:{
         type: String
-    },
-    note: {
-        type: Schema.Types.ObjectId,
-        ref: "Note"
     }
+    // note: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Note"
+    // }
+},{
+    // _id: ObjectIdSchema,
+    versionKey: false
+
 });
 
 var Movie = mongoose.model("Movie", MovieSchema);
