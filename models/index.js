@@ -1,4 +1,4 @@
 module.exports = {
-    Movie: require("./Movies"),
-    Note: require("./Notes")
+    Movies: require("./Movies.js"),
+    Notes: require("./Notes.js")
 };

@@ -27,8 +27,8 @@ var MovieSchema = new Schema({
 
 });
 
-var Movie = mongoose.model("Movie", MovieSchema);
+var Movies = mongoose.model("Movies", MovieSchema);
 
 
-module.exports = Movie; 
+module.exports = Movies; 
 

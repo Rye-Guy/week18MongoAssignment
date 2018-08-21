@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var Movie = require("./models/Movies.js");
 var mongoose = require('mongoose');
 
 var logger = require('morgan');
@@ -13,7 +12,11 @@ var app = express();
 
 app.use(logger("dev"));
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
+
+var exphbs = require("express-handlebars");
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
@@ -21,17 +24,24 @@ mongoose.connect('mongodb://localhost/Movie');
 
 var db = require("./models");
 
-var port = 8889;
+// db.once("error", function(error){
+//     console.log("Mongoose Error:", error);
+// });
 
-app.listen(process.env.PORT || port, function(){
-    console.log('server running on port 4545');
-});
+// db.once("open", function(){
+//     console.log("Mongoose connection successful");
+// });
+
 
 app.get("/", function(req, res){
-    res.send("You are on the index");
+    Movies.find({}, function(err, doc){
+        if(err){
+            throw err;
+        }else{
+            res.render("index", {movies: doc});
+        }
+    });
 });
-
-
 
 app.get("/scrape", function(req, res){
     request("https://www.imdb.com/chart/top", function(err, response, html){
@@ -42,13 +52,12 @@ app.get("/scrape", function(req, res){
             
             var result = {};
 
-
             result.moviePoster = $(this).children("td.posterColumn").children("a").children("img").attr("src");
             result.movieTitle = $(this).children("td.titleColumn").children("a").text();
             result.movieRelease = $(this).children("td.titleColumn").children("span.secondaryInfo").text();
             result.movieRating = $(this).children("td.ratingColumn").children("strong").attr("title");
             
-            db.Movie.create(result).then(function(dbMovies){
+            db.Movies.create(result).then(function(dbMovies){
                 console.log(dbMovies);
                 console.log("Scrape completed");
             }).catch(function(err){
@@ -58,14 +67,20 @@ app.get("/scrape", function(req, res){
         });
 
   });
-
   res.send("Movies Scraped");
 });
 
 app.get('/movies', function(req, res){
-    db.Movie.find({}).then(function(dbMovies){
+    db.Movies.find({}).then(function(dbMovies){
         res.json(dbMovies)
     }).catch(function(err){
         res.json(err);
     });
+});
+
+
+var port = 8890;
+
+app.listen(process.env.PORT || port, function(){
+    console.log('server running on port' + port);
 });
