@@ -16,11 +16,11 @@ var MovieSchema = new Schema({
     },
     movieRating:{
         type: String
+    },
+    note: {
+        type: Schema.Types.ObjectId,
+        ref: "Note"
     }
-    // note: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Note"
-    // }
 },{
     // _id: ObjectIdSchema,
     versionKey: false

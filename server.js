@@ -23,14 +23,16 @@ app.use(express.static("public"));
 mongoose.connect('mongodb://localhost/Movie');
 
 var db = require("./models");
+var Note = require("./models/Notes.js");
 
-// db.once("error", function(error){
-//     console.log("Mongoose Error:", error);
-// });
 
-// db.once("open", function(){
-//     console.log("Mongoose connection successful");
-// });
+db.Movies.once("error", function(error){
+    console.log("Mongoose Error:", error);
+});
+
+db.Movies.once("open", function(){
+    console.log("Mongoose connection successful");
+});
 
 
 app.get("/", function(req, res){
@@ -75,6 +77,38 @@ app.get('/movies', function(req, res){
         res.json(dbMovies)
     }).catch(function(err){
         res.json(err);
+    });
+});
+
+
+
+app.get("/movies/:id", function(req, res){
+    db.Movies.findOne({"_id": req.params.id}).populate("note").exec(function(err, doc){
+        if(err){
+            console.log(err);
+        }else{
+            res.json(doc);
+        }
+    });
+});
+
+
+app.post("/movies/:id", function(req, res){
+    var newNote = new Note(req.body);
+
+    newNote.save(function(err, doc){
+        if(err){
+            console.log(err);
+        }else{
+            db.Movies.findOneAndUpdate({"_id": req.params.id}, {"note": doc._id}).exec(function(err, doc){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.send(doc);
+                }
+            });
+        }
     });
 });
 
