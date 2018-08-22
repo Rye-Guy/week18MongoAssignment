@@ -86,7 +86,7 @@ textarea {
    Browser Upgrade Prompt
    ========================================================================== */
 
-.browserupgrade {
+   .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
@@ -97,9 +97,31 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+   .card .card-image img{
+       width: initial !important;
+   }
 
 
 
+#moviesList{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 300px;
+    align-items: center;
+    margin-top: 10px;
+    padding: 8px;
+}
+
+nav{
+    background-color: #4a148c;
+}
 
 
 

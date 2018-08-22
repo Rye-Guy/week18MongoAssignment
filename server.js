@@ -20,7 +20,12 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
-mongoose.connect('mongodb://localhost/Movie');
+//connection to our movie database
+
+mongoose.connect('mongodb://localhost/Movie', function(){
+    mongoose.connection.db.dropDatabase();
+    console.log("DB dropped");
+});
 
 var db = require("./models");
 var Note = require("./models/Notes.js");
@@ -46,6 +51,7 @@ app.get("/", function(req, res){
 });
 
 app.get("/scrape", function(req, res){
+    mongoose.connection.db.dropDatabase();
     request("https://www.imdb.com/chart/top", function(err, response, html){
         var $ = cheerio.load(html);
 
@@ -60,16 +66,15 @@ app.get("/scrape", function(req, res){
             result.movieRating = $(this).children("td.ratingColumn").children("strong").attr("title");
             
             db.Movies.create(result).then(function(dbMovies){
-                console.log(dbMovies);
                 console.log("Scrape completed");
             }).catch(function(err){
                 return res.json(err);
             });
-
+        
         });
-
+        
   });
-  res.send("Movies Scraped");
+  res.render("scraped");
 });
 
 app.get('/movies', function(req, res){
@@ -78,6 +83,11 @@ app.get('/movies', function(req, res){
     }).catch(function(err){
         res.json(err);
     });
+});
+
+app.get('/dropdb', function(req, res){
+    mongoose.connection.db.dropDatabase();
+    res.render("index");
 });
 
 
@@ -108,6 +118,16 @@ app.post("/movies/:id", function(req, res){
                     res.send(doc);
                 }
             });
+        }
+    });
+});
+
+app.get('/notes', function(req, res){
+    db.Movies.find({"note": 0}).exec(function(err, doc){
+        if(err){
+            console.log(err);
+        }else{
+            res.send(doc);
         }
     });
 });
