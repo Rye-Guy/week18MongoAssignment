@@ -20,10 +20,15 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
+var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/Movie';
+
+
 //connection to our movie database
 
-mongoose.connect('mongodb://localhost/Movie', function(){
-    // mongoose.connection.db.dropDatabase();
+mongoose.Promise = Promise; 
+
+mongoose.connect(MONGODB_URI, function(){
+    mongoose.connection.db.dropDatabase();
     console.log("DB dropped");
 });
 
