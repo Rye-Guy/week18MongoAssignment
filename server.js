@@ -23,12 +23,12 @@ app.use(express.static("public"));
 //connection to our movie database
 
 mongoose.connect('mongodb://localhost/Movie', function(){
-    mongoose.connection.db.dropDatabase();
+    // mongoose.connection.db.dropDatabase();
     console.log("DB dropped");
 });
 
 var db = require("./models");
-var Note = require("./models/Notes.js");
+var Note = require("./models/Notes");
 
 
 db.Movies.once("error", function(error){
@@ -64,7 +64,6 @@ app.get("/scrape", function(req, res){
             result.movieTitle = $(this).children("td.titleColumn").children("a").text();
             result.movieRelease = $(this).children("td.titleColumn").children("span.secondaryInfo").text();
             result.movieRating = $(this).children("td.ratingColumn").children("strong").attr("title");
-            
             db.Movies.create(result).then(function(dbMovies){
                 console.log("Scrape completed");
             }).catch(function(err){
@@ -76,6 +75,30 @@ app.get("/scrape", function(req, res){
   });
   res.render("scraped");
 });
+
+app.get('/notes', function(req, res){
+    db.Notes.find({}).then(function(dbNotes){
+        res.json(dbNotes)
+    }).catch(function(err){
+        res.json(err);
+    });
+});
+
+app.delete('/notes/:id', function(req, res){
+    db.Notes.deleteOne({"_id": req.params.id}).exec(function(err, doc){
+        if(err){
+            console.log(err);
+        }else{
+            console.log(res.json(doc));
+            console.log(doc);
+        }
+    });
+});
+
+app.get('/quotes', function(req, res){
+    res.render('notes');
+})
+
 
 app.get('/movies', function(req, res){
     db.Movies.find({}).then(function(dbMovies){
@@ -122,15 +145,6 @@ app.post("/movies/:id", function(req, res){
     });
 });
 
-app.get('/notes', function(req, res){
-    db.Movies.find({"note": 0}).exec(function(err, doc){
-        if(err){
-            console.log(err);
-        }else{
-            res.send(doc);
-        }
-    });
-});
 
 
 var port = 8890;

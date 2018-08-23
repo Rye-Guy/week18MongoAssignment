@@ -1,8 +1,22 @@
 $.getJSON("/movies", function(data){
     console.log(data);
-
+    if(data.length == 0){
+        $("#moviesList").append("<h2>There are no movies saved to the database. Please feel free to press the scrape movies button</h2>");
+    }else{
     for (i = 0; i < data.length; i++){
         $("#moviesList").append("<div class='movie card col s12' data-id='" + data[i]._id + "'>" + "<div class='card-image'><img src=" + data[i].moviePoster + "></div>" + "<span class='card-title'>" + data[i].movieTitle + "</span>" + "<div class='card-content'>" + "<p>" + "Movie Release: " + data[i].movieRelease + "</p>" + "<br>" + "<p>" + "Movie Rating: " + data[i].movieRating + "</p>" + "</div>" + "<button data-target='modal1' class='btn modal-trigger'>" + "Comment" + "</button>" + "</div>");
+        }
+    }
+});
+
+$.getJSON("/notes", function(data){
+    console.log(data);
+    if(data.length == 0){
+        $("#notesList").append("<h2>There are no quotes saved to the database :(</h2>");
+    }else{
+    for(i = 0; i < data.length; i++){
+        $("#notesList").append("<div class='card purple darken-4' id='note' data-id='>" + data[i]._id + "'>" +  "<div class='card-content white-text'>" + "<span class='card-title'>" + data[i].title + "</span>" + "<p>" + data[i].body + "</p>" + "</div>" + "</div>");
+    }
     }
 });
 
@@ -43,6 +57,15 @@ $(document).on("click", "#saveNote", function(){
         $("#notes").empty();
     });
 
+});
+
+$(document).on("click", "#note", function(){
+    var thisId = $(this).attr("data-id");
+
+    $.ajax({
+        method: "DELETE",
+        url: "/note/" + thisId
+    }).done(console.log("Deleted" + thisId));
 });
 
 

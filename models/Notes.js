@@ -9,6 +9,8 @@ var NoteSchema = new Schema({
     body:{
         type: String
     }
+},{
+    versionKey: false
 });
 
 var Note = mongoose.model("Note", NoteSchema);

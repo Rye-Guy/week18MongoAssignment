@@ -109,24 +109,25 @@ textarea {
     justify-content: space-evenly;
 }
 
+#notesList{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
 .card{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     width: 300px;
     align-items: center;
-    margin-top: 10px;
+    margin: 22px 22px 22px 22px;
     padding: 8px;
 }
 
 nav{
     background-color: #4a148c;
 }
-
-
-
-
-
 
 
 
