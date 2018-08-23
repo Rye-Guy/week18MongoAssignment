@@ -15,7 +15,7 @@ $.getJSON("/notes", function(data){
         $("#notesList").append("<h2>There are no quotes saved to the database :(</h2>");
     }else{
     for(i = 0; i < data.length; i++){
-        $("#notesList").append("<div class='card purple darken-4' id='note' data-id='" + data[i]._id + "'>" +  "<div class='card-content white-text'>" + "<span class='card-title'>" + data[i].title + "</span>" + "<p>" + data[i].body + "</p>" + "</div>" + "</div>");
+        $("#notesList").append("<div class='card teal darken-2' data-id='" + data[i]._id + "'>" +  "<div class='card-content white-text'>"+ "<a id_><img class='close-btn' src='images/close-circular-button-of-a-cross.svg' style='cursor: pointer;' id='note' data-id='" + data[i]._id + "'></a>" + "<span class='card-title'>" + data[i].title + "</span>" + "<p>" + data[i].body + "</p>" + "</div>" + "</div>");
     }
     }
 });
@@ -31,13 +31,10 @@ $(document).on("click", ".movie", function(){
     }).done(function(data){
         console.log(data);
         $("#notes").append("<h2>" + data.movieTitle + "</h2>");
-        $("#notes").append(" <div class='input-field col s6'>" +"<input id='titleInput' type='text' name='title'>" + "<label for='titleInput'>Title</label>" + "</div>");
+        $("#notes").append(" <div class='input-field col s6'>" +"<input id='titleInput' type='text' name='title'>" + "<label for='titleInput'></label>" + "</div>");
         $("#notes").append("<div class='input-field col s12'>" + "<textarea id='bodyInput' class='materialize-textarea active' name='body'></textarea>" + "<label>Whats the Quote?</label>" + "</div>");
         $("#notes").append("<button data-id='" + data._id + "' id='saveNote' class='btn modal-close'>Save Note</button>");
-    if(data.note){
-        $("#titleInput").val(data.note.title);
-        $("#bodyInput").val(data.note.body);
-    }
+        $("#titleInput").val(data.movieTitle);
     });
 });
 
@@ -65,7 +62,7 @@ $(document).on("click", "#note", function(){
     $.ajax({
         method: "DELETE",
         url: "/notes/" + thisId
-    }).done(console.log("Deleted " + thisId));
+    }).done(console.log("Deleted " + thisId), location.reload());
 });
 
 

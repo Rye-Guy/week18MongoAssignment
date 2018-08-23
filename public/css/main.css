@@ -123,13 +123,31 @@ textarea {
     align-items: center;
     margin: 22px 22px 22px 22px;
     padding: 8px;
+    border: 5px solid #2bbbad;
 }
 
 nav{
-    background-color: #4a148c;
+    background-color: #2bbbad;
 }
 
+.close-btn{
+    width: 35px;
+    position: absolute;
+    left: 83%;
+    top: 15px;
+}
 
+body{
+    background-color: #fff59d;
+}
+
+.btn-large{
+    display: flex;
+    justify-content: space-evenly;
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 150px;
+}
 
 
 
